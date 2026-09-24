@@ -1,0 +1,49 @@
+{
+  "name": "arnica-test-app",
+  "version": "1.0.0",
+  "description": "Test application for SCA yarn.lock regeneration fix",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint .",
+    "bundle": "react-native bundle --platform ios --entry-file index.js --bundle-output ios/main.jsbundle",
+    "regenerate-lock": "rm -f yarn.lock && yarn install",
+    "clean": "rm -rf node_modules yarn.lock"
+  },
+  "dependencies": {
+    "react": "18.2.0",
+    "react-native": "0.79.5",
+    "react-navigation": "^5.3.11",
+    "axios": "^1.4.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.0",
+    "@babel/preset-react": "^7.22.0",
+    "@babel/preset-typescript": "^7.22.0",
+    "@react-native-community/eslint-config": "^3.2.0",
+    "@testing-library/jest-native": "^5.4.3",
+    "@testing-library/react-native": "^12.0.0",
+    "@types/jest": "^29.5.0",
+    "@types/react": "^18.2.0",
+    "@types/react-native": "^0.72.0",
+    "babel-jest": "^29.5.0",
+    "eslint": "^8.43.0",
+    "jest": "^29.5.0",
+    "metro-react-native-babel-preset": "^0.77.0",
+    "typescript": "^5.1.0"
+  },
+  "keywords": [
+    "react",
+    "react-native",
+    "mobile",
+    "testing"
+  ],
+  "author": "Arnica Test",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0",
+    "yarn": ">=1.22.0"
+  }
+}
