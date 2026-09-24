@@ -14,7 +14,7 @@
   "dependencies": {
     "react": "18.2.0",
     "react-native": "0.79.5",
-    "react-navigation": "^5.3.11",
+    "react-navigation": "^5.0.0",
     "axios": "^1.4.0",
     "lodash": "^4.17.21"
   },
