@@ -1,0 +1,51 @@
+name: ui-core Build and Test
+
+on:
+  pull_request:
+    paths:
+      - 'ui-core/**'
+      - 'shared/**'
+      - 'packages/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'turbo.json'
+      - 'tsconfig.common.json'
+      - '.npmrc'
+      - '.github/workflows/ci-ui-core.yaml'
+
+jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      should-run: ${{ steps.check.outputs.should-run }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check if relevant files changed
+        id: check
+        run: |
+          git diff --no-renames --name-only origin/${{ github.base_ref }}...HEAD | grep -q -E '^(ui-core/|shared/|packages/|package\.json$|pnpm-lock\.yaml$|pnpm-workspace\.yaml$|turbo\.json$|tsconfig\.common\.json$|\.npmrc$|\.github/workflows/ci-ui-core\.yaml$)' && echo "should-run=true" || echo "should-run=false"
+          echo "should-run=$(git diff --no-renames --name-only origin/${{ github.base_ref }}...HEAD | grep -q -E '^(ui-core/|shared/|packages/|package\.json$|pnpm-lock\.yaml$|pnpm-workspace\.yaml$|turbo\.json$|tsconfig\.common\.json$|\.npmrc$|\.github/workflows/ci-ui-core\.yaml$)' && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
+
+  ui-core-build-and-test:
+    needs: check-changes
+    if: needs.check-changes.outputs.should-run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build ui-core
+        run: pnpm build --filter=ui-core
+      - name: Test ui-core
+        run: pnpm test --filter=ui-core
